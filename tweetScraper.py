@@ -28,10 +28,10 @@ class MyStreamListener(tp.StreamListener):
     #     print(raw_data)
     #     return True
     def on_error(self, status_code):
-        print("error " + str(status_code))
+        print("ERROR: " + str(status_code))
         return False
 
-
+ 
 
 
 
