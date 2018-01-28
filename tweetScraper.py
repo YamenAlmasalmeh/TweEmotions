@@ -24,7 +24,7 @@ class MyStreamListener(tp.StreamListener):
         if time() - start_time <120:
             with open("data.csv", 'a') as data:
                 dataWriter = csv.writer(data)
-                dataWriter.writerow([remove_non_ascii(str(status.user.time_zone)), remove_non_ascii(status.text)])
+                dataWriter.writerow([remove_non_ascii(str(status.user.location)), remove_non_ascii(status.text)])
             print(status.user.time_zone," ", status.text)
             return True
         else:
