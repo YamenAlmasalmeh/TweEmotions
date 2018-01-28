@@ -4,8 +4,11 @@ from time import time
 import csv
 
 consumer_key = "EqgbbGiU0DqxEawMOFIYXG9SQ"
+
 consumer_secret = "9TWLaawIUJ8NGiXbTRcf6ablz6EDECbDatzag0ld5WnBg2W7Rj"
+
 access_token = "957345473576275968-ugTVpRBp4vSgAJj9nJTrYVS2S6E6UlV"
+
 access_token_secret = "3vQQasBocZAMaqdrtzmlWCQfMh62N2T9E3a2zmz4PF7Qu"
 
 auth = tp.OAuthHandler(consumer_key, consumer_secret)
@@ -15,9 +18,17 @@ api = tp.API(auth)
 
 start_time = time()
 
-with open("data.csv", "w",newline='') as data:
+with open("PositiveTweets.csv", "w",newline='') as data:
     datawriter = csv.writer(data)
-    datawriter.writerow(["Location", "Tweet"])
+    datawriter.writerow(["Location", "Tweet", "Positivity"])
+
+with open("NegativeTweets.csv", "w", newline='') as data:
+    datawriter = csv.writer(data)
+    datawriter.writerow(["Location", "Tweet", "Positivity"])
+
+with open("NeutralTweets.csv", "w", newline='') as data:
+    datawriter = csv.writer(data)
+    datawriter.writerow(["Location", "Tweet", "Positivity"])
 
 def remove_non_ascii(text):
     return ''.join(i if ord(i)<128 else ' ' for i in text)
@@ -26,11 +37,22 @@ def remove_non_ascii(text):
 class MyStreamListener(tp.StreamListener):
 
     def on_status(self, status):
-        if time() - start_time <300:
-            with open("data.csv", 'a', newline='') as data:
-                dataWriter = csv.writer(data)
-                dataWriter.writerow([remove_non_ascii(str(status.user.location)), remove_non_ascii(status.text), \
-                        str(tb.TextBlob(remove_non_ascii(status.text)).sentiment.polarity)])
+        if time() - start_time <5:
+            if tb.TextBlob(remove_non_ascii(status.text)).sentiment.polarity > 0:
+                with open("PositiveTweets.csv", 'a', newline='') as data:
+                    dataWriter = csv.writer(data)
+                    dataWriter.writerow([remove_non_ascii(str(status.user.location)), remove_non_ascii(status.text), \
+                            str(tb.TextBlob(remove_non_ascii(status.text)).sentiment.polarity)])
+            elif tb.TextBlob(remove_non_ascii(status.text)).sentiment.polarity < 0:
+                with open("NegativeTweets.csv", 'a', newline='') as data:
+                    dataWriter = csv.writer(data)
+                    dataWriter.writerow([remove_non_ascii(str(status.user.location)), remove_non_ascii(status.text), \
+                            str(tb.TextBlob(remove_non_ascii(status.text)).sentiment.polarity)])
+            else:
+                with open("NeutralTweets.csv", 'a', newline='') as data:
+                    dataWriter = csv.writer(data)
+                    dataWriter.writerow([remove_non_ascii(str(status.user.location)), remove_non_ascii(status.text), \
+                                         str(tb.TextBlob(remove_non_ascii(status.text)).sentiment.polarity)])
             return True
         else:
             return False
@@ -48,3 +70,30 @@ myStreamListener = MyStreamListener()
 myStream = tp.Stream(auth=api.auth, listener=myStreamListener)
 
 myStream.filter(languages=["en"],track=['a','e', 'i', 'o', 'u', 'A', 'E', 'I', 'O', 'U'])
+
+
+# negatives = open("NegativeTweets.csv", 'w', newline='')
+# positives = open("PositiveTweets.csv", 'w', newline='')
+#
+#
+# positivesWriter = csv.writer(positives)
+#
+# negativesWriter = csv.writer(negatives)
+#
+# positivesWriter.writerow(["Location", "Tweet", "Positivity"])
+#
+# negativesWriter.writerow(["Location", "Tweet", "Positivity"])
+
+# with open("ScrapedTweets.csv", 'r') as scrapedTweets:
+#     tweets = csv.reader(scrapedTweets)
+#     counter = 0
+#     for tweet in tweets:
+#         if counter == 0:
+#             continue
+#         print(tweet)
+#         if int(tweet[2]) <= 0:
+#             negativesWriter.writerow(tweet)
+#         else:
+#             positivesWriter.writerow(tweet)
+#         counter+=1
+#
