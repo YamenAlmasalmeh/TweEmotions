@@ -71,29 +71,3 @@ myStream = tp.Stream(auth=api.auth, listener=myStreamListener)
 
 myStream.filter(languages=["en"],track=['a','e', 'i', 'o', 'u', 'A', 'E', 'I', 'O', 'U'])
 
-
-# negatives = open("NegativeTweets.csv", 'w', newline='')
-# positives = open("PositiveTweets.csv", 'w', newline='')
-#
-#
-# positivesWriter = csv.writer(positives)
-#
-# negativesWriter = csv.writer(negatives)
-#
-# positivesWriter.writerow(["Location", "Tweet", "Positivity"])
-#
-# negativesWriter.writerow(["Location", "Tweet", "Positivity"])
-
-# with open("ScrapedTweets.csv", 'r') as scrapedTweets:
-#     tweets = csv.reader(scrapedTweets)
-#     counter = 0
-#     for tweet in tweets:
-#         if counter == 0:
-#             continue
-#         print(tweet)
-#         if int(tweet[2]) <= 0:
-#             negativesWriter.writerow(tweet)
-#         else:
-#             positivesWriter.writerow(tweet)
-#         counter+=1
-#
