@@ -37,7 +37,7 @@ def remove_non_ascii(text):
 class MyStreamListener(tp.StreamListener):
 
     def on_status(self, status):
-        if time() - start_time <5:
+        if time() - start_time <600:
             if tb.TextBlob(remove_non_ascii(status.text)).sentiment.polarity > 0:
                 with open("PositiveTweets.csv", 'a', newline='') as data:
                     dataWriter = csv.writer(data)
